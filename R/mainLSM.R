@@ -1,5 +1,3 @@
-#' @keywords internal
-
 mainLSM<-function(psi2T, xiT, EZ, VZ, Y, xi, psi2, s2){
 		
 		SI4VZ <- solve(diag(nrow(VZ)) + 4 * VZ)

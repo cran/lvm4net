@@ -1,5 +1,3 @@
-#' @keywords internal
-
 upSigmaT<-function(psi2T, xiT, SI4SigmaT, Y, cont, ZT, s2){
 	
 	D<-nrow(SI4SigmaT)

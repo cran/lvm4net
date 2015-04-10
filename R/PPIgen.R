@@ -8,11 +8,10 @@
 #' 
 #' Binary adjacency matrix containing genetic interactions between 67 proteins.
 #' 
-#' @references Gollini, I., and Murphy, T. B. (2014). Joint Modelling of 
-#' Multiple Network Views. \url{http://arxiv.org/abs/1301.3759}.
+#' @references Gollini, I., and Murphy, T. B. (2014), "Joint Modelling of Multiple Network Views", Journal of Computational and Graphical Statistics \url{http://arxiv.org/abs/1301.3759}.
 #' @docType data
 #' @seealso \code{\link{PPIphy}}
 #' @keywords datasets
-#' @format Binary adjacency matric
+#' @format Binary adjacency matrix
 #' @name PPIgen
 NULL

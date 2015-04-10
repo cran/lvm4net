@@ -1,5 +1,3 @@
-#' @keywords internal
-
 Ell<-function(psi2T, xiT, SigmaT, ZT, Y){
 	
 	SI4SigmaT <- solve(diag(nrow(SigmaT)) + 4 * SigmaT)

@@ -1,5 +1,3 @@
-#' @keywords internal
-
 upZT<-function(psi2T, xiT, SigmaT, ZT, Y, s2){
 			
 	SI4SigmaT <- solve(diag(nrow(SigmaT)) + 4 * SigmaT)

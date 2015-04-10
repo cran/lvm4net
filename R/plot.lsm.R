@@ -3,7 +3,7 @@
 #' Function to plot an object of class \code{'lsm'}
 #'
 #' @param x object of class \code{'lsm'}
-#' @param Y \eqn{N\times N} binary adjacency matrix
+#' @param Y (\code{N} x \code{N}) binary adjacency matrix
 #' @param drawCB draw confidence bounds 
 #' @param dimZ dimensions of the latent variable to be plotted. Default \code{dimZ = c(1, 2)}
 #' @param colPl \code{col} for the points representing the nodes. Default \code{colPl = NULL}
@@ -20,8 +20,8 @@
 #' @param ... Arguments to be passed to methods, such as graphical parameters (see \code{\link{par}}). 
 #' @export
 #' @examples
-#' n <- 20
-#' Y <- network(n, directed = FALSE)[,]
+#' N <- 20
+#' Y <- network(N, directed = FALSE)[,]
 #'
 #' modLSM <- lsm(Y, D = 2) 
 #' plot(modLSM, Y)
@@ -31,7 +31,10 @@
 #' # Plot with 99% CB
 #' plot(modLSM, Y, drawCB = TRUE, LEVEL = .99)
 
-plot.lsm <- function(x, Y, drawCB = FALSE, dimZ = c(1, 2), colPl = 1, colEll = rgb(.6, .6 ,.6 , alpha=.1), LEVEL = .95, pchplot = 20, pchEll = 19, pchPl = 19, cexPl = 1.1, arrowhead = FALSE, curve = NULL, xlim = NULL, ylim = NULL, ...)
+plot.lsm <- function(x, Y, drawCB = FALSE, dimZ = c(1, 2), colPl = 1, 
+                     colEll = rgb(.6, .6 ,.6 , alpha=.1), LEVEL = .95, 
+                     pchplot = 20, pchEll = 19, pchPl = 19, cexPl = 1.1, 
+                     arrowhead = FALSE, curve = NULL, xlim = NULL, ylim = NULL, ...)
 {		
 		stopifnot(inherits(x, 'lsm'))
 		stopifnot(is.adjacency(Y))

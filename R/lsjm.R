@@ -3,9 +3,9 @@
 #' Function to joint modelling of multiple network views using the Latent Space Jont Model (LSJM) Gollini and Murphy (2014). 
 #' The LSJM merges the information given by the multiple network views by assuming that the probability of a node being connected with other nodes in each view is explained by a unique latent variable.
 #'
-#' @param Y list containing a \eqn{N\times N} binary adjacency matrix for each network view.
+#' @param Y list containing a (\code{N} x \code{N}) binary adjacency matrix for each network view.
 #' @param D integer dimension of the latent space
-#' @param sigma \eqn{D\times D} variance/covariance matrix of the prior distribution for the latent positions. Default \code{sigma = 1}
+#' @param sigma (\code{D} x \code{D}) variance/covariance matrix of the prior distribution for the latent positions. Default \code{sigma = 1}
 #' @param xi vector of means of the prior distributions of \eqn{\alpha}. Default \code{xi = 0}
 #' @param psi2 vector of variances of the prior distributions of \eqn{\alpha}. Default \code{psi2 = 2}
 #' @param Niter maximum number of iterations. Default \code{Niter = 500}
@@ -15,26 +15,27 @@
 
 #'  @return List containing:
 #' \itemize{
-#' \item \code{EZ} \eqn{N\times D} matrix containing the posterior means of the latent positions
-#' \item \code{VZ} \eqn{D\times D} matrix containing the posterior variance of the latent positions
-#' \item \code{lsmEZ} list contatining a \eqn{N\times D} matrix for each network view containing the posterior means of the latent positions under each model in the latent space.
-#' \item \code{lsmVZ} list contatining a \eqn{D\times D} matrix for each network view containing the posterior variance of the latent positions under each model in the latent space.
+#' \item \code{EZ} (\code{N} x \code{D}) matrix containing the posterior means of the latent positions
+#' \item \code{VZ} (\code{D} x \code{D}) matrix containing the posterior variance of the latent positions
+#' \item \code{lsmEZ} list contatining a (\code{N} x \code{D}) matrix for each network view containing the posterior means of the latent positions under each model in the latent space.
+#' \item \code{lsmVZ} list contatining a (\code{D} x \code{D}) matrix for each network view containing the posterior variance of the latent positions under each model in the latent space.
 #' \item \code{xiT} vector of means of the posterior distributions of \eqn{\alpha}
 #' \item \code{psi2T} vector of variances of the posterior distributions of \eqn{\alpha}
 #' \item \code{Ell} expected log-likelihood
 #' }
-#' @references Gollini, I., and Murphy, T. B. (2014). Joint Modelling of 
-#' Multiple Network Views. \url{http://arxiv.org/abs/1301.3759}.
+#' @references Gollini, I., and Murphy, T. B. (2014), "Joint Modelling of Multiple Network Views", Journal of Computational and Graphical Statistics \url{http://arxiv.org/abs/1301.3759}.
 #' @export
 #' @examples
 #'## Simulate Undirected Network
-#'    n <- 20
+#'   N <- 20
 #'   Ndata <- 2
 #'    Y <- list()
-#'    Y[[1]] <- network(n, directed = FALSE)[,]
+#'    Y[[1]] <- network(N, directed = FALSE)[,]
 #'    ### create a new view that is similar to the original
+#'    
 #'   for(nd in 2:Ndata){
-#'     Y[[nd]] <- Y[[nd - 1]] - sample(c(-1, 0, 1), n * n, replace = TRUE, prob = c(.05, .85, .1))
+#'     Y[[nd]] <- Y[[nd - 1]] - sample(c(-1, 0, 1), N * N, replace = TRUE, 
+#'    prob = c(.05, .85, .1))
 #'     Y[[nd]] <- 1 * (Y[[nd]]  > 0 )
 #'   diag(Y[[nd]]) <- 0
 #'    }
@@ -48,7 +49,8 @@
 #' plot(modLSJM, Y, drawCB = TRUE)
 #' plot(modLSJM, Y, drawCB = TRUE, plotZtilde = TRUE)
 
-lsjm<-function(Y, D, sigma = 1, xi = rep(0, length(Y)), psi2 = rep(2, length(Y)), Niter = 500, tol = 0.1^2, preit = 20, randomZ = FALSE)
+lsjm<-function(Y, D, sigma = 1, xi = rep(0, length(Y)), psi2 = rep(2, length(Y)), 
+               Niter = 500, tol = 0.1^2, preit = 20, randomZ = FALSE)
 {
 	stopifnot(is.list(Y), sapply(Y, is.adjacency))
 	stopifnot(length(D) == 1, D > 0, D == floor(D))
@@ -62,7 +64,7 @@ lsjm<-function(Y, D, sigma = 1, xi = rep(0, length(Y)), psi2 = rep(2, length(Y))
 	N <- nrow(Y[[1]])
 	Ndata <- length(Y)
 	
-	xiT<-xi
+	xiT <- xi
 	psi2T<-psi2
 	
 	lsmVZ <- list()
@@ -78,8 +80,8 @@ lsjm<-function(Y, D, sigma = 1, xi = rep(0, length(Y)), psi2 = rep(2, length(Y))
 			
 			if(D %in% 2:3){ # Fruchterman-Reingold
 				lsmEZ <- lapply(Y, frEZ, d = D)
-			} else { # Multidimensional Scaling
-				lsmEZ<- lapply(Y, function(y) cmdscale(as.dist(1 - y), k = D))
+			} else { # Multidimensional Scaling
+				lsmEZ <- lapply(Y, function(y) cmdscale(as.dist(1 - y), k = D))
 		}
 	
 	}
@@ -93,7 +95,7 @@ lsjm<-function(Y, D, sigma = 1, xi = rep(0, length(Y)), psi2 = rep(2, length(Y))
 		Aezvz <- lsmEZ[[i]] %*% solve(lsmVZ[[i]]) + Aezvz
 		
 		xiT[i] <- glm(c(Y[[i]])~c(as.matrix(dist(lsmEZ[[i]])^2)))$coeff[1]
-		names(xiT[i])<-NULL
+		names(xiT[i]) <- NULL
 	}
 	
 if(D>1){
@@ -104,15 +106,15 @@ if(D>1){
 		VZ <- as.matrix(1 / sum(sapply(lsmVZ, solve)) - (Ndata - 1) / sigma^2)
 	}
 	
-	EZ <- Aezvz%*%VZ	
+	EZ <- Aezvz %*% VZ	
 	
 	############
 	############
 
-	iter<-0
-	dif<-1
-	l<-seq(0,0,length.out=3)
-	ellm<-rep(0,Ndata)
+	iter <- 0
+	dif <- 1
+	l <- seq(0, 0, length.out=3)
+	ellm <- rep(0, Ndata)
 
 	while (iter<Niter & dif>tol)
 	{
@@ -129,12 +131,12 @@ if(D>1){
 
 	######## Joint Model ##############	
 
-	if(D>1 & stepA == 0)
+	if(D > 1 & iter > preit)
 	{
 	for(i in 2:Ndata)
  	{	
- 		rotLSM<- rotXtoY(lsmEZ[[i]], lsmEZ[[1]]%*%lsmVZ[[i]])
- 		lsmEZ[[i]]<-rotLSM$X
+ 		rotLSM <- rotXtoY(lsmEZ[[i]], lsmEZ[[1]] %*% lsmVZ[[i]])
+ 		lsmEZ[[i]] <- rotLSM$X
  	}
 	}
 	
@@ -152,7 +154,7 @@ if(D>1){
 		VZ <- as.matrix(1 / sum(sapply(lsmVZ, solve)) - (Ndata - 1) / sigma^2)
 	}
 	
-	EZ<- Aezvz%*%VZ
+	EZ<- Aezvz %*% VZ
 
 	########
 	
@@ -166,7 +168,7 @@ if(D>1){
 	
 	if(iter > preit) dif<- l[3] - l[2]
 		
-	if(dif < -tol) dif <- abs(dif)+1
+	if(dif < -tol) dif <- abs(dif) + 1
 	
 	}
 	

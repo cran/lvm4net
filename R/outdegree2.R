@@ -1,5 +1,3 @@
-#' @keywords internal
-
 outdegree2 <- function(y){
 	
 	stopifnot(is.adjacency(y))

@@ -10,13 +10,14 @@
 #' in a latent space: the closer two nodes are in the latent space, the more likely
 #' they are connected.
 #' Functions for binary bipartite networks will be added soon.
-#' @references Gollini, I., and Murphy, T. B. (2014). Joint Modelling of 
-#' Multiple Network Views. \url{http://arxiv.org/abs/1301.3759}.
+#' @references Gollini, I., and Murphy, T. B. (2014), "Joint Modelling of Multiple Network Views", Journal of Computational and Graphical Statistics \url{http://arxiv.org/abs/1301.3759}.
 #' @references Hoff, P., Raftery, A., and Handcock, M. (2002), "Latent Space Approaches to Social Network Analysis", Journal of the American Statistical Association, 97, 1090--1098.
 #'
 #' @name lvm4net-package
 #' @aliases lvm4net
+#' @import MASS
 #' @import ergm
+#' @import network
 #' @import ellipse
 #' @importFrom igraph layout.fruchterman.reingold graph.adjacency
 #' @docType package

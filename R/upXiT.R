@@ -1,5 +1,3 @@
-#' @keywords internal
-
 upXiT<-function(psi2T, xiT, SI4SigmaT, Y, cont, xi, psi2){
 	
 	A <- sqrt(det(SI4SigmaT)) * exp(-cont) * exp(psi2T / 2)
