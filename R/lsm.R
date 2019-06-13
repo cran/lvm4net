@@ -14,7 +14,7 @@
 #' @param tol desired tolerance. Default \code{tol = 0.1^2}
 #' @param randomZ logical; If \code{randomZ = TRUE} random initialization for the latent positions is used. If \code{randomZ = FALSE} and \code{D} = 2 or 3 the latent positions are initialized using the Fruchterman-Reingold method and multidimensional scaling is used for \code{D} = 1 or \code{D} > 3. Default \code{randomZ = FALSE}
 #' @param nstart number of starts
-#'  @return List containing:
+#' @return List containing:
 #' \itemize{
 #' \item \code{lsmEZ} (\code{N} x \code{D}) matrix containing the posterior means of the latent positions
 #' \item \code{lsmVZ} (\code{D} x \code{D}) matrix containing the posterior variance of the latent positions
@@ -122,7 +122,7 @@ lsm <- function(Y, D, sigma = 1, xi = 0, psi2 = 2, Niter = 100, Miniter = 10, to
 		
 		SI4SigmaT <- solve(diag(D) + 4 * lsm$lsmVZ)
 
-		if(det(SI4SigmaT) < 0 & ntry < maxtry) {
+		if((is.nan(det(SI4SigmaT)) | det(SI4SigmaT) < 0) & ntry < maxtry) {
 			
 			lsm <- restartlsm(N, D, randomZ, Y, psi2)
 			
